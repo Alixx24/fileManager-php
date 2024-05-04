@@ -6,9 +6,9 @@ use Models\Token;
 require_once 'autoload.php';
 
 $user_id = 1;
-$type = 'email';
+$type = 'password';
 $obj = new Token();
-$token = $obj->saveToken($user_id, $type);
+$token = $obj->getToken($user_id, $type);
 
 
 var_dump($token);
