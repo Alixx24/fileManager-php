@@ -20,23 +20,32 @@ class Database
 
     }
 
-    public function __destruct()
-    {
+    public function __destruct() {
+
         $this->connection->close();
+
     }
 
-    protected function executeStatement($sql, $params = [])
-    {
+
+    protected function executeStatement($sql, $params = []) {
+
         $stmt = $this->connection->prepare($sql);
+
         if (!$stmt) {
-            die("Error in preparing Statement: " . $this->connection->error);
+            die("Error in preparing Statement: ".$this->connection->error);
         }
-        if (!empty($params)) {
+
+        if(!empty($params)) {
+
             $types = str_repeat('s', count($params));
+
             $stmt->bind_param($types, ...$params);
+
         }
+
         $stmt->execute();
         return $stmt;
+
     }
 }
 

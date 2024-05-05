@@ -21,8 +21,11 @@ class Token extends Database
         ];
 
         $stmt = $this->executeStatement($sql, $params);
-
-       return $stmt;
+        if ($stmt->affected_rows == 1) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public function getToken($user_id, $type)
@@ -35,5 +38,40 @@ class Token extends Database
         $stmt = $this->executeStatement($sql, $params);
         $result = $stmt->get_result();
         return $result->fetch_assoc();
+    }
+
+    //compare two token
+    public function compareToken($user_id, $type, $userToken) {
+
+        $lastValidToken = $this->getToken($user_id, $type);
+
+        if($lastValidToken === null) {
+            return false;
+        }
+
+        
+        if($lastValidToken['token'] === $userToken) {
+            $result = $this->useToken($lastValidToken['token']);
+            return true;
+        }else{
+            return false;
+        }
+
+    }
+
+    public function useToken($token) {
+
+        $sql = "UPDATE tokens SET used = '1' WHERE token = ?";
+
+        $params = [$token];
+
+        $stmt = $this->executeStatement($sql, $params);
+
+        if($stmt->affected_rows == 1) {
+            return true;
+        }else {
+            return false;
+        }
+
     }
 }

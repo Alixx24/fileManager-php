@@ -1,3 +1,20 @@
+
+<?php
+require "autoload.php";
+use Models\AuthUser;
+
+  if(isset($_POST['register_btn']) && $_SERVER['REQUEST_METHOD'] === 'POST')
+  {
+    // $csrf_token = $_POST['csrf_token'];
+    $csrf_token = '11111111111';
+
+    $data = $_POST['frm'];
+
+    $authUser = new AuthUser();
+    $authUser->register($csrf_token , $data);
+
+  }
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -18,15 +35,6 @@
       </div>
     </div>
 
-    <div class="form-group">
-      <h2>Register</h2>
-      <form action="" class="register">
-        <input type="hidden" name="csrf_token" value="">
-      <label for="exampleInputPassword1">Password</label>
-      <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-      <input value="register"></input>
-      </form>
-    </div>
 
 
     <div class="form-group form-check">
@@ -35,6 +43,19 @@
     </div>
     <button type="submit" class="btn btn-primary">Submit</button>
   </form>
+
+  <div class="form-group">
+    <h2>Register</h2>
+    <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>" class="register" method="post">
+      <input type="hidden" name="csrf_token" value="">
+      <input name="frm['email]" type="text" class="form-control" placeholder="email">
+
+      <input name="frm['password']" type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+      <input name="frm['confirm_password']" type="password" class="form-control" id="exampleInputPassword1" placeholder="Confirm Password">
+      <input name="register_btn" class="btn btn-primary" type="submit" value="register">
+    </form>
+  </div>
+
 </body>
 
 </html>
